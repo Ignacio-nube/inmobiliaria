@@ -11,6 +11,10 @@ import {
   Globe,
   Check,
   SlidersHorizontal,
+  Sparkles,
+  Sun,
+  ChevronDown,
+  ChevronUp,
 } from 'lucide-react'
 import toast from 'react-hot-toast'
 import { organizacionSchema, type OrganizacionFormData } from '@/lib/validators'
@@ -80,6 +84,128 @@ const COLOR_PALETTES = [
   },
 ] as const
 
+const THEMES = [
+  {
+    id: 'default',
+    name: 'Clasico',
+    description: 'Fondo claro, limpio y profesional',
+    recommended: true,
+    preview: (
+      <div className="mb-3 overflow-hidden rounded-lg border border-border bg-white p-2">
+        <div className="h-3 w-16 rounded bg-gray-100" />
+        <div className="mt-2 flex gap-1.5">
+          <div className="h-10 flex-1 rounded bg-gray-50 border border-gray-200" />
+          <div className="h-10 flex-1 rounded bg-gray-50 border border-gray-200" />
+        </div>
+        <div className="mt-1.5 h-2 w-20 rounded bg-gray-200" />
+      </div>
+    ),
+    icon: Sun,
+  },
+  {
+    id: 'luxury',
+    name: 'Luxury Serif',
+    description: 'Elegante, minimalista, tipografía serif',
+    recommended: true,
+    preview: (
+      <div className="mb-3 overflow-hidden rounded border border-stone-200 bg-[#fafaf9] p-2">
+        <div className="flex flex-col items-center mb-2">
+          <div className="h-2 w-16 bg-stone-900 mb-1" />
+          <div className="h-px w-8 bg-stone-300" />
+        </div>
+        <div className="grid grid-cols-2 gap-2 px-1">
+          <div className="h-10 bg-white border border-stone-100 shadow-sm" />
+          <div className="h-10 bg-white border border-stone-100 shadow-sm" />
+        </div>
+      </div>
+    ),
+    icon: Sparkles,
+  },
+  {
+    id: 'liquid-glass',
+    name: 'Liquid Glass',
+    description: 'Fondo oscuro con efecto glassmorphism',
+    recommended: false,
+    preview: (
+      <div className="mb-3 overflow-hidden rounded-lg border border-gray-700 bg-[#0f0f1a] p-2">
+        <div className="h-3 w-16 rounded bg-white/10" />
+        <div className="mt-2 flex gap-1.5">
+          <div className="h-10 flex-1 rounded bg-white/5 border border-white/10" />
+          <div className="h-10 flex-1 rounded bg-white/5 border border-white/10" />
+        </div>
+        <div className="mt-1.5 h-2 w-20 rounded bg-white/15" />
+      </div>
+    ),
+    icon: Sparkles,
+  },
+  {
+    id: 'futuristic',
+    name: 'Futuristic Neon',
+    description: 'Oscuro, neon, botones redondeados',
+    recommended: false,
+    preview: (
+      <div className="mb-3 overflow-hidden rounded-lg border border-gray-700 bg-black p-2 relative">
+        <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_top,_var(--tw-gradient-stops))] from-indigo-900/40 via-gray-900/0 to-gray-900/0" />
+        <div className="relative z-10">
+          <div className="h-3 w-16 rounded-full bg-indigo-500/20 border border-indigo-500/50" />
+          <div className="mt-2 flex gap-1.5">
+            <div className="h-10 flex-1 rounded-full bg-gray-900 border border-gray-800" />
+            <div className="h-10 flex-1 rounded-full bg-indigo-600 shadow-[0_0_10px_rgba(79,70,229,0.3)]" />
+          </div>
+          <div className="mt-1.5 h-2 w-20 rounded bg-gray-800" />
+        </div>
+      </div>
+    ),
+    icon: Sparkles,
+  },
+  {
+    id: 'minimal-bento',
+    name: 'Minimal Bento',
+    description: 'Alto contraste, bordes, grilla limpia',
+    recommended: false,
+    preview: (
+      <div className="mb-3 overflow-hidden border border-gray-200 bg-white p-2">
+        <div className="flex gap-2 mb-2">
+          <div className="h-12 w-12 border-2 border-black bg-black text-white flex items-center justify-center text-[8px] font-bold">BTN</div>
+          <div className="flex-1 space-y-1">
+            <div className="h-2 w-full bg-gray-900" />
+            <div className="h-2 w-2/3 bg-gray-400" />
+          </div>
+        </div>
+        <div className="grid grid-cols-2 gap-1">
+          <div className="h-8 border border-gray-200 bg-gray-50" />
+          <div className="h-8 border border-gray-200 bg-gray-50" />
+        </div>
+      </div>
+    ),
+    icon: Check,
+  },
+  {
+    id: 'neo-pop',
+    name: 'Neo Pop',
+    description: 'Divertido, bordes gruesos, sombras duras',
+    recommended: false,
+    preview: (
+      <div className="mb-3 overflow-hidden rounded-lg border-2 border-black bg-yellow-50 p-2 shadow-[2px_2px_0_0_#000000]">
+        <div className="flex gap-2 mb-2">
+          <div className="h-12 w-12 border-2 border-black bg-amber-400 rounded-lg shadow-[2px_2px_0_0_#000000] flex items-center justify-center text-[10px] font-bold">POP</div>
+          <div className="flex-1 space-y-1">
+            <div className="h-2 w-full border border-black bg-white rounded-full" />
+            <div className="h-2 w-2/3 border border-black bg-white rounded-full" />
+          </div>
+        </div>
+        <div className="grid grid-cols-2 gap-1">
+          <div className="h-8 border-2 border-black bg-white rounded-lg" />
+          <div className="h-8 border-2 border-black bg-white rounded-lg" />
+        </div>
+      </div>
+    ),
+    icon: Sun,
+  },
+]
+
+type TemaID = 'default' | 'liquid-glass' | 'futuristic' | 'minimal-bento' | 'neo-pop' | 'luxury'
+
 export default function SettingsPage() {
   const { profile } = useAuth()
   const [loading, setLoading] = useState(true)
@@ -94,6 +220,8 @@ export default function SettingsPage() {
   const [colores, setColores] = useState<ColoresOrganizacion>({})
   const [redes, setRedes] = useState<RedesSociales>({})
   const [showCustomColors, setShowCustomColors] = useState(false)
+  const [selectedTema, setSelectedTema] = useState<TemaID>('default')
+  const [othersOpen, setOthersOpen] = useState(false)
 
   const {
     register,
@@ -102,6 +230,10 @@ export default function SettingsPage() {
     formState: { errors },
   } = useForm<OrganizacionFormData>({
     resolver: zodResolver(organizacionSchema),
+    defaultValues: {
+      nombre: '',
+      mostrar_nombre_logo: true,
+    },
   })
 
   useEffect(() => {
@@ -127,12 +259,21 @@ export default function SettingsPage() {
         provincia: org.provincia ?? '',
         hero_titulo: org.hero_titulo ?? '',
         hero_subtitulo: org.hero_subtitulo ?? '',
+        mostrar_nombre_logo: org.mostrar_nombre_logo ?? true,
       })
 
       setLogoUrl(org.logo_url ?? '')
       setHeroImages(org.hero_imagenes ?? [])
       setColores((org.colores as ColoresOrganizacion) ?? {})
+      setSelectedTema(((org.colores as ColoresOrganizacion)?.tema as TemaID) || 'default')
       setRedes((org.redes_sociales as RedesSociales) ?? {})
+      
+      // Open accordion if selected theme is one of the "others"
+      const currentTheme = THEMES.find(t => t.id === ((org.colores as ColoresOrganizacion)?.tema || 'default'))
+      if (currentTheme && !currentTheme.recommended) {
+        setOthersOpen(true)
+      }
+
       setLoading(false)
     }
     load()
@@ -175,8 +316,11 @@ export default function SettingsPage() {
       hero_subtitulo: data.hero_subtitulo || null,
       logo_url: logoUrl || null,
       hero_imagenes: heroImages.length > 0 ? heroImages : null,
-      colores: Object.keys(colores).length > 0 ? (colores as Record<string, string>) : null,
+      colores: Object.keys(colores).length > 0 || selectedTema !== 'default'
+        ? ({ ...colores, tema: selectedTema } as Record<string, string>)
+        : null,
       redes_sociales: Object.keys(redes).length > 0 ? (redes as Record<string, string>) : null,
+      mostrar_nombre_logo: data.mostrar_nombre_logo,
     }
 
     const { error } = await supabase
@@ -202,8 +346,11 @@ export default function SettingsPage() {
     )
   }
 
+  const recommendedThemes = THEMES.filter(t => t.recommended)
+  const otherThemes = THEMES.filter(t => !t.recommended)
+
   return (
-    <div className="mx-auto max-w-3xl space-y-6">
+    <div className="mx-auto max-w-3xl space-y-6 pb-20">
       <div>
         <h1 className="text-2xl font-bold text-text-primary">Configuración</h1>
         <p className="mt-1 text-sm text-text-secondary">
@@ -219,7 +366,7 @@ export default function SettingsPage() {
 
       <form onSubmit={handleSubmit(onSubmit)} className="space-y-8">
         {/* Organization Info */}
-        <section className="rounded-xl border border-border bg-bg-card p-6">
+        <section className="rounded-xl border border-border bg-bg-card p-6 shadow-sm">
           <h2 className="mb-4 text-lg font-semibold text-text-primary">
             Datos de la inmobiliaria
           </h2>
@@ -231,6 +378,7 @@ export default function SettingsPage() {
                 error={errors.nombre?.message}
                 {...register('nombre')}
               />
+              <p className="mt-1 text-xs text-text-tertiary">Este nombre aparecerá en la pestaña del navegador.</p>
             </div>
             <Input
               label="Teléfono"
@@ -273,35 +421,49 @@ export default function SettingsPage() {
         </section>
 
         {/* Logo */}
-        <section className="rounded-xl border border-border bg-bg-card p-6">
-          <h2 className="mb-4 text-lg font-semibold text-text-primary">Logo</h2>
-          <div className="flex items-start gap-4">
-            {logoUrl ? (
-              <div className="flex h-16 w-40 items-center justify-center rounded-lg border border-border bg-bg-subtle p-2">
-                <img
-                  src={logoUrl}
-                  alt="Logo"
-                  className="max-h-full max-w-full object-contain"
+        <section className="rounded-xl border border-border bg-bg-card p-6 shadow-sm">
+          <h2 className="mb-4 text-lg font-semibold text-text-primary">Logo y Marca</h2>
+          <div className="flex flex-col gap-6">
+            <div className="flex items-start gap-4">
+              {logoUrl ? (
+                <div className="flex h-16 w-40 items-center justify-center rounded-lg border border-border bg-bg-subtle p-2">
+                  <img
+                    src={logoUrl}
+                    alt="Logo"
+                    className="max-h-full max-w-full object-contain"
+                  />
+                </div>
+              ) : (
+                <div className="flex h-16 w-40 items-center justify-center rounded-lg border-2 border-dashed border-border">
+                  <ImageIcon size={24} className="text-text-tertiary" />
+                </div>
+              )}
+              <div className="flex-1">
+                <Input
+                  label="URL del logo (PNG o SVG)"
+                  placeholder="https://..."
+                  value={logoUrl}
+                  onChange={(e) => setLogoUrl(e.target.value)}
                 />
               </div>
-            ) : (
-              <div className="flex h-16 w-40 items-center justify-center rounded-lg border-2 border-dashed border-border">
-                <ImageIcon size={24} className="text-text-tertiary" />
-              </div>
-            )}
-            <div className="flex-1">
-              <Input
-                label="URL del logo (PNG o SVG)"
-                placeholder="https://..."
-                value={logoUrl}
-                onChange={(e) => setLogoUrl(e.target.value)}
+            </div>
+
+            <div className="flex items-center gap-3 rounded-lg border border-border bg-bg-subtle/30 p-4">
+              <input
+                type="checkbox"
+                id="mostrar_nombre_logo"
+                className="h-4 w-4 rounded border-border text-primary focus:ring-primary/20"
+                {...register('mostrar_nombre_logo')}
               />
+              <label htmlFor="mostrar_nombre_logo" className="text-sm font-medium text-text-primary">
+                Mostrar nombre de la inmobiliaria junto al logo en el encabezado
+              </label>
             </div>
           </div>
         </section>
 
         {/* Hero */}
-        <section className="rounded-xl border border-border bg-bg-card p-6">
+        <section className="rounded-xl border border-border bg-bg-card p-6 shadow-sm">
           <h2 className="mb-4 text-lg font-semibold text-text-primary">
             Sección Hero (portada)
           </h2>
@@ -356,7 +518,7 @@ export default function SettingsPage() {
                 {heroImages.map((url, index) => (
                   <div
                     key={`${url}-${index}`}
-                    className="flex items-center gap-2 rounded-lg border border-border p-2"
+                    className="flex items-center gap-2 rounded-lg border border-border p-2 bg-bg-card"
                   >
                     <button
                       type="button"
@@ -390,8 +552,94 @@ export default function SettingsPage() {
           </div>
         </section>
 
+        {/* Theme Design Selector */}
+        <section className="rounded-xl border border-border bg-bg-card p-6 shadow-sm">
+          <div className="mb-4 flex items-center gap-2">
+            <Sparkles size={20} className="text-primary" />
+            <h2 className="text-lg font-semibold text-text-primary">
+              Estilo visual
+            </h2>
+          </div>
+          <p className="mb-4 text-sm text-text-secondary">
+            Elegí el estilo de diseño para tu sitio web
+          </p>
+
+          <div className="space-y-4">
+            <div className="grid gap-4 sm:grid-cols-2">
+              {recommendedThemes.map((theme) => (
+                <button
+                  key={theme.id}
+                  type="button"
+                  onClick={() => setSelectedTema(theme.id as TemaID)}
+                  className={`group relative overflow-hidden rounded-xl border-2 p-4 text-left transition-all duration-200 ${
+                    selectedTema === theme.id
+                      ? 'border-primary bg-primary/5 shadow-md'
+                      : 'border-border hover:border-primary/40 hover:shadow-sm'
+                  }`}
+                >
+                  {theme.preview}
+                  <div className="flex items-center gap-2">
+                    <theme.icon size={18} className="text-text-secondary" />
+                    <div>
+                      <p className="text-sm font-semibold text-text-primary">{theme.name}</p>
+                      <p className="text-xs text-text-tertiary">{theme.description}</p>
+                    </div>
+                  </div>
+                  {selectedTema === theme.id && (
+                    <div className="absolute right-2 top-2 flex h-5 w-5 items-center justify-center rounded-full bg-primary text-white">
+                      <Check size={12} />
+                    </div>
+                  )}
+                </button>
+              ))}
+            </div>
+
+            <div className="overflow-hidden rounded-xl border border-border">
+              <button
+                type="button"
+                onClick={() => setOthersOpen(!othersOpen)}
+                className="flex w-full items-center justify-between bg-bg-subtle/50 px-4 py-3 text-sm font-medium text-text-secondary transition-colors hover:bg-bg-subtle"
+              >
+                <span>Otros estilos</span>
+                {othersOpen ? <ChevronUp size={16} /> : <ChevronDown size={16} />}
+              </button>
+              
+              {othersOpen && (
+                <div className="grid gap-4 p-4 sm:grid-cols-2">
+                  {otherThemes.map((theme) => (
+                    <button
+                      key={theme.id}
+                      type="button"
+                      onClick={() => setSelectedTema(theme.id as TemaID)}
+                      className={`group relative overflow-hidden rounded-xl border-2 p-4 text-left transition-all duration-200 ${
+                        selectedTema === theme.id
+                          ? 'border-primary bg-primary/5 shadow-md'
+                          : 'border-border hover:border-primary/40 hover:shadow-sm'
+                      }`}
+                    >
+                      {theme.preview}
+                      <div className="flex items-center gap-2">
+                        <theme.icon size={18} className="text-text-secondary" />
+                        <div>
+                          <p className="text-sm font-semibold text-text-primary">{theme.name}</p>
+                          <p className="text-xs text-text-tertiary">{theme.description}</p>
+                        </div>
+                      </div>
+                      {selectedTema === theme.id && (
+                        <div className="absolute right-2 top-2 flex h-5 w-5 items-center justify-center rounded-full bg-primary text-white">
+                          <Check size={12} />
+                        </div>
+                      )}
+                    </button>
+                  ))}
+                </div>
+              )}
+            </div>
+          </div>
+        </section>
+
         {/* Colors */}
-        <section className="rounded-xl border border-border bg-bg-card p-6">
+        <section className="rounded-xl border border-border bg-bg-card p-6 shadow-sm">
           <div className="mb-4 flex items-center gap-2">
             <Palette size={20} className="text-primary" />
             <h2 className="text-lg font-semibold text-text-primary">
@@ -415,6 +663,7 @@ export default function SettingsPage() {
                   type="button"
                   onClick={() => {
                     setColores({
+                      ...colores,
                       primario: palette.primario,
                       secundario: palette.secundario,
                       acento: palette.acento,
@@ -565,7 +814,7 @@ export default function SettingsPage() {
         </section>
 
         {/* Social Media */}
-        <section className="rounded-xl border border-border bg-bg-card p-6">
+        <section className="rounded-xl border border-border bg-bg-card p-6 shadow-sm">
           <div className="mb-4 flex items-center gap-2">
             <Globe size={20} className="text-primary" />
             <h2 className="text-lg font-semibold text-text-primary">
@@ -609,8 +858,8 @@ export default function SettingsPage() {
         </section>
 
         {/* Submit */}
-        <div className="flex justify-end">
-          <Button type="submit" loading={saving} size="lg">
+        <div className="fixed bottom-6 left-0 right-0 z-40 mx-auto w-fit md:relative md:bottom-0 md:w-full md:flex md:justify-end">
+          <Button type="submit" loading={saving} size="lg" className="shadow-xl md:shadow-none px-12">
             <Save size={18} />
             Guardar configuración
           </Button>

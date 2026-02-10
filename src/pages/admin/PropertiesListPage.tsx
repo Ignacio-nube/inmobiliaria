@@ -13,13 +13,13 @@ import {
 import toast from 'react-hot-toast'
 import { supabase } from '@/lib/supabase'
 import { useAuth } from '@/hooks/useAuth'
-import { formatPrice } from '@/lib/formatters'
 import {
   TIPO_OPERACION_LABELS,
   TIPO_PROPIEDAD_LABELS,
   ESTADO_PROPIEDAD_LABELS,
 } from '@/lib/constants'
-import Badge, { getOperacionBadgeVariant } from '@/components/ui/Badge'
+import Badge from '@/components/ui/Badge'
+import { formatPrice, getOperacionBadgeVariant } from '@/lib/formatters'
 import Button from '@/components/ui/Button'
 import type { PropiedadConImagenes } from '@/types/property'
 

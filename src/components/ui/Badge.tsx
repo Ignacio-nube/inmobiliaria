@@ -32,21 +32,3 @@ export default function Badge({ children, variant = 'neutral', className = '' }:
     </span>
   )
 }
-
-/**
- * Helper para mapear tipo_operacion a variante de badge
- */
-export function getOperacionBadgeVariant(
-  tipo: 'venta' | 'alquiler' | 'alquiler_temporario'
-): BadgeVariant {
-  switch (tipo) {
-    case 'venta':
-      return 'venta'
-    case 'alquiler':
-      return 'alquiler'
-    case 'alquiler_temporario':
-      return 'temporario'
-    default:
-      return 'neutral'
-  }
-}

@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState } from 'react'
+import { useEffect, useState, useCallback } from 'react'
 
 interface UseInViewOptions {
   threshold?: number
@@ -11,22 +11,26 @@ interface UseInViewOptions {
  * Hook that detects when an element enters the viewport.
  * Useful for scroll-triggered animations.
  */
-export function useInView<T extends HTMLElement = HTMLDivElement>(
+export function useInView<T extends HTMLElement = HTMLElement>(
   options: UseInViewOptions = {}
 ) {
   const { threshold = 0.1, rootMargin = '0px', once = true } = options
-  const ref = useRef<T>(null)
+  const [node, setNode] = useState<T | null>(null)
   const [inView, setInView] = useState(false)
 
+  const ref = useCallback((node: T | null) => {
+    setNode(node)
+  }, [])
+
   useEffect(() => {
-    const el = ref.current
-    if (!el) return
+    if (!node) return
+
 
     const observer = new IntersectionObserver(
       ([entry]) => {
         if (entry.isIntersecting) {
           setInView(true)
-          if (once) observer.unobserve(el)
+          if (once) observer.unobserve(node)
         } else if (!once) {
           setInView(false)
         }
@@ -34,9 +38,9 @@ export function useInView<T extends HTMLElement = HTMLDivElement>(
       { threshold, rootMargin }
     )
 
-    observer.observe(el)
+    observer.observe(node)
     return () => observer.disconnect()
-  }, [threshold, rootMargin, once])
+  }, [node, threshold, rootMargin, once])
 
   return { ref, inView }
 }

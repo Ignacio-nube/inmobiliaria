@@ -52,4 +52,6 @@ export interface ColoresOrganizacion {
   primario?: string
   secundario?: string
   acento?: string
+  /** Visual theme design: 'default' | 'liquid-glass' */
+  tema?: string
 }

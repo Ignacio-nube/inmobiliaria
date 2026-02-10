@@ -1,9 +1,10 @@
 import { useState, useEffect, useCallback } from 'react'
 import { useNavigate } from 'react-router'
 import { Search } from 'lucide-react'
+import { motion, AnimatePresence, type Variants } from 'framer-motion'
 import { TIPO_OPERACION_LABELS, TIPO_PROPIEDAD_LABELS } from '@/lib/constants'
 import { useFilterStore } from '@/store/filterStore'
-import type { Organizacion } from '@/types/property'
+import type { Organizacion, ColoresOrganizacion } from '@/types/property'
 
 interface HeroSectionProps {
   organization: Organizacion | null
@@ -18,13 +19,13 @@ const FALLBACK_IMAGES = [
 export default function HeroSection({ organization }: HeroSectionProps) {
   const navigate = useNavigate()
   const { resetFilters, setFilters } = useFilterStore()
-  const [mounted, setMounted] = useState(false)
+  
+  // Get current theme
+  const colores = organization?.colores as ColoresOrganizacion | null
+  const tema = colores?.tema || 'default'
+  const isNeoPop = tema === 'neo-pop'
+  const isLuxury = tema === 'luxury'
 
-  useEffect(() => {
-    // Small delay to ensure CSS transition is visible after first paint
-    const t = setTimeout(() => setMounted(true), 50)
-    return () => clearTimeout(t)
-  }, [])
   const [currentSlide, setCurrentSlide] = useState(0)
 
   const images = organization?.hero_imagenes?.length
@@ -66,96 +67,218 @@ export default function HeroSection({ organization }: HeroSectionProps) {
     navigate('/propiedades')
   }
 
+  // Animation Variants
+  const containerVariants: Variants = {
+    hidden: { opacity: 0 },
+    visible: {
+      opacity: 1,
+      transition: {
+        staggerChildren: 0.1,
+        delayChildren: 0.2
+      }
+    }
+  }
+
+  const itemVariants: Variants = {
+    hidden: { opacity: 0, y: isLuxury ? 40 : 20 },
+    visible: { 
+      opacity: 1, 
+      y: 0,
+      transition: { 
+        duration: isLuxury ? 1.2 : 0.5, 
+        ease: isLuxury ? [0.22, 1, 0.36, 1] : "easeOut" // Custom easing for luxury (easeOutQuint-ish)
+      }
+    }
+  }
+
+  // Specific Neo Pop bouncy variants
+  const neoPopInputVariants: Variants = {
+    initial: { scale: 1 },
+    focus: { 
+      scale: 1.02, 
+      boxShadow: "6px 6px 0px 0px #000000",
+      transition: { type: "spring", stiffness: 300, damping: 15 }
+    },
+    hover: {
+      scale: 1.01,
+      transition: { type: "spring", stiffness: 400, damping: 10 }
+    }
+  }
+
+  const neoPopButtonVariants: Variants = {
+    initial: { scale: 1, rotate: 0 },
+    hover: { 
+      scale: 1.05, 
+      rotate: -2,
+      boxShadow: "6px 6px 0px 0px #000000",
+      transition: { type: "spring", stiffness: 300 }
+    },
+    tap: { 
+      scale: 0.95, 
+      boxShadow: "0px 0px 0px 0px #000000",
+      y: 4,
+      x: 4
+    }
+  }
+
+  // Luxury smooth variants
+  const luxuryInputVariants: Variants = {
+    initial: { borderBottomColor: "#d6d3d1", backgroundColor: "transparent" },
+    focus: { 
+      borderBottomColor: "#1c1917",
+      backgroundColor: "rgba(255,255,255,0.5)",
+      transition: { duration: 0.5 } 
+    }
+  }
+
   return (
     <section className="relative h-[70vh] min-h-[480px] overflow-hidden md:h-[85vh] md:min-h-[600px]">
       {/* Background slides */}
-      {images.map((img, i) => (
-        <div
-          key={img}
-          className={`absolute inset-0 transition-opacity duration-1000 ${
-            i === currentSlide ? 'opacity-100' : 'opacity-0'
-          }`}
+      <AnimatePresence initial={false}>
+        <motion.div
+          key={currentSlide}
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          exit={{ opacity: 0 }}
+          transition={{ duration: 1.5, ease: "easeInOut" }}
+          className="absolute inset-0"
         >
-          <img
-            src={img}
+          <motion.img
+            src={images[currentSlide]}
             alt=""
+            initial={{ scale: 1.1 }}
+            animate={{ scale: 1 }}
+            transition={{ duration: 6, ease: "linear" }}
             className="h-full w-full object-cover"
-            loading={i === 0 ? 'eager' : 'lazy'}
+            loading="eager"
           />
-        </div>
-      ))}
+        </motion.div>
+      </AnimatePresence>
 
       {/* Gradient overlay */}
       <div className="absolute inset-0 bg-gradient-to-b from-black/60 via-black/40 to-black/70" />
 
       {/* Content */}
       <div className="relative flex h-full flex-col items-center justify-center px-4 text-center text-white">
-        <h1 className={`appear-ready max-w-3xl text-3xl font-extrabold leading-tight text-white drop-shadow-lg md:text-5xl lg:text-6xl ${mounted ? 'appeared' : ''}`}>
-          {titulo}
-        </h1>
-        <p className={`appear-ready mt-4 max-w-xl text-base text-white/90 drop-shadow md:text-lg ${mounted ? 'appeared' : ''}`} style={{ transitionDelay: '200ms' }}>
-          {subtitulo}
-        </p>
-
-        {/* Search bar */}
-        <form
-          onSubmit={handleSearch}
-          className={`appear-ready mt-8 flex w-full max-w-3xl flex-col gap-3 rounded-2xl bg-white/95 p-4 shadow-2xl backdrop-blur-sm sm:flex-row sm:items-end sm:gap-2 sm:rounded-full sm:p-2 ${mounted ? 'appeared' : ''}`}
-          style={{ transitionDelay: '400ms' }}
+        <motion.div
+          variants={containerVariants}
+          initial="hidden"
+          animate="visible"
+          className="w-full flex flex-col items-center"
         >
-          <div className="flex-1">
-            <label className="mb-1 block text-left text-xs font-medium text-text-secondary sm:hidden">
-              Operacion
-            </label>
-            <select
-              value={operacion}
-              onChange={(e) => setOperacion(e.target.value)}
-              className="w-full rounded-lg border-0 bg-bg-subtle px-4 py-3 text-sm text-text-primary outline-none sm:rounded-full"
-            >
-              <option value="">Operacion</option>
-              {Object.entries(TIPO_OPERACION_LABELS).map(([val, label]) => (
-                <option key={val} value={val}>{label}</option>
-              ))}
-            </select>
-          </div>
-
-          <div className="flex-1">
-            <label className="mb-1 block text-left text-xs font-medium text-text-secondary sm:hidden">
-              Tipo
-            </label>
-            <select
-              value={tipo}
-              onChange={(e) => setTipo(e.target.value)}
-              className="w-full rounded-lg border-0 bg-bg-subtle px-4 py-3 text-sm text-text-primary outline-none sm:rounded-full"
-            >
-              <option value="">Tipo</option>
-              {Object.entries(TIPO_PROPIEDAD_LABELS).map(([val, label]) => (
-                <option key={val} value={val}>{label}</option>
-              ))}
-            </select>
-          </div>
-
-          <div className="flex-1">
-            <label className="mb-1 block text-left text-xs font-medium text-text-secondary sm:hidden">
-              Ciudad
-            </label>
-            <input
-              type="text"
-              value={ciudad}
-              onChange={(e) => setCiudad(e.target.value)}
-              placeholder="Ciudad o barrio"
-              className="w-full rounded-lg border-0 bg-bg-subtle px-4 py-3 text-sm text-text-primary outline-none placeholder:text-text-tertiary sm:rounded-full"
-            />
-          </div>
-
-          <button
-            type="submit"
-            className="flex items-center justify-center gap-2 rounded-lg bg-primary px-6 py-3 text-sm font-semibold text-white transition-colors hover:bg-primary-500 sm:rounded-full"
+          <motion.h1 
+            variants={itemVariants}
+            className="max-w-3xl text-3xl font-extrabold leading-tight text-white drop-shadow-lg md:text-5xl lg:text-6xl"
           >
-            <Search size={18} />
-            <span className="sm:hidden">Buscar</span>
-          </button>
-        </form>
+            {titulo}
+          </motion.h1>
+          
+          <motion.p 
+            variants={itemVariants}
+            className="mt-4 max-w-xl text-base text-white/90 drop-shadow md:text-lg"
+          >
+            {subtitulo}
+          </motion.p>
+
+          {/* Search bar */}
+          <motion.form
+            onSubmit={handleSearch}
+            variants={itemVariants}
+            className={`mt-8 flex w-full max-w-3xl flex-col gap-3 p-4 shadow-2xl backdrop-blur-sm sm:flex-row sm:items-end sm:gap-2 sm:p-2 hero-search-form`}
+          >
+            <div className="flex-1">
+              <label className="mb-1 block text-left text-xs font-medium text-text-secondary sm:hidden">
+                Operacion
+              </label>
+              <motion.select
+                value={operacion}
+                onChange={(e) => setOperacion(e.target.value)}
+                className="w-full border-0 px-4 py-3 text-sm outline-none hero-search-input"
+                {...(isNeoPop ? {
+                  variants: neoPopInputVariants,
+                  initial: "initial",
+                  whileFocus: "focus",
+                  whileHover: "hover"
+                } : isLuxury ? {
+                  variants: luxuryInputVariants,
+                  initial: "initial",
+                  whileFocus: "focus"
+                } : {})}
+              >
+                <option value="">Operacion</option>
+                {Object.entries(TIPO_OPERACION_LABELS).map(([val, label]) => (
+                  <option key={val} value={val}>{label}</option>
+                ))}
+              </motion.select>
+            </div>
+
+            <div className="flex-1">
+              <label className="mb-1 block text-left text-xs font-medium text-text-secondary sm:hidden">
+                Tipo
+              </label>
+              <motion.select
+                value={tipo}
+                onChange={(e) => setTipo(e.target.value)}
+                className="w-full border-0 px-4 py-3 text-sm outline-none hero-search-input"
+                {...(isNeoPop ? {
+                  variants: neoPopInputVariants,
+                  initial: "initial",
+                  whileFocus: "focus",
+                  whileHover: "hover"
+                } : isLuxury ? {
+                  variants: luxuryInputVariants,
+                  initial: "initial",
+                  whileFocus: "focus"
+                } : {})}
+              >
+                <option value="">Tipo</option>
+                {Object.entries(TIPO_PROPIEDAD_LABELS).map(([val, label]) => (
+                  <option key={val} value={val}>{label}</option>
+                ))}
+              </motion.select>
+            </div>
+
+            <div className="flex-1">
+              <label className="mb-1 block text-left text-xs font-medium text-text-secondary sm:hidden">
+                Ciudad
+              </label>
+              <motion.input
+                type="text"
+                value={ciudad}
+                onChange={(e) => setCiudad(e.target.value)}
+                placeholder="Ciudad o barrio"
+                className="w-full border-0 px-4 py-3 text-sm outline-none hero-search-input"
+                {...(isNeoPop ? {
+                  variants: neoPopInputVariants,
+                  initial: "initial",
+                  whileFocus: "focus",
+                  whileHover: "hover"
+                } : isLuxury ? {
+                  variants: luxuryInputVariants,
+                  initial: "initial",
+                  whileFocus: "focus"
+                } : {})}
+              />
+            </div>
+
+            <motion.button
+              type="submit"
+              className="flex items-center justify-center gap-2 bg-primary px-6 py-3 text-sm font-semibold text-white transition-colors hover:bg-primary-500 hero-search-button"
+              {...(isNeoPop ? {
+                variants: neoPopButtonVariants,
+                initial: "initial",
+                whileHover: "hover",
+                whileTap: "tap"
+              } : {
+                whileHover: { scale: 1.02 },
+                whileTap: { scale: 0.98 }
+              })}
+            >
+              <Search size={18} />
+              <span className="sm:hidden">Buscar</span>
+            </motion.button>
+          </motion.form>
+        </motion.div>
 
         {/* Slide dots */}
         {images.length > 1 && (

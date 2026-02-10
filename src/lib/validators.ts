@@ -105,6 +105,7 @@ export const organizacionSchema = z.object({
   provincia: z.string().max(100).optional().or(z.literal('')),
   hero_titulo: z.string().max(200).optional().or(z.literal('')),
   hero_subtitulo: z.string().max(300).optional().or(z.literal('')),
+  mostrar_nombre_logo: z.boolean(),
 })
 
 export type OrganizacionFormData = z.infer<typeof organizacionSchema>

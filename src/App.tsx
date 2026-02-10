@@ -6,6 +6,7 @@ import { Toaster } from 'react-hot-toast'
 import PublicLayout from '@/components/layout/PublicLayout'
 import AdminLayout from '@/components/layout/AdminLayout'
 import AuthGuard from '@/components/layout/AuthGuard'
+import { OrganizationProvider } from '@/contexts/OrganizationContext'
 
 // Public pages (lazy loaded)
 const HomePage = lazy(() => import('@/pages/public/HomePage'))
@@ -35,38 +36,40 @@ function PageLoader() {
 export default function App() {
   return (
     <BrowserRouter>
-      <Suspense fallback={<PageLoader />}>
-        <Routes>
-          {/* Public routes */}
-          <Route element={<PublicLayout />}>
-            <Route index element={<HomePage />} />
-            <Route path="propiedades" element={<SearchResultsPage />} />
-            <Route path="propiedades/:slug" element={<PropertyDetailPage />} />
-            <Route path="favoritos" element={<FavoritesPage />} />
-            <Route path="comparar" element={<ComparePage />} />
-            <Route path="contacto" element={<ContactPage />} />
-          </Route>
-
-          {/* Admin login (sin layout admin) */}
-          <Route path="admin/login" element={<LoginPage />} />
-
-          {/* Admin routes (protegidas) */}
-          <Route element={<AuthGuard />}>
-            <Route path="admin" element={<AdminLayout />}>
-              <Route index element={<DashboardPage />} />
-              <Route path="propiedades" element={<PropertiesListPage />} />
-              <Route path="propiedades/nueva" element={<PropertyEditPage />} />
-              <Route path="propiedades/:id" element={<PropertyEditPage />} />
-              <Route path="configuracion" element={<SettingsPage />} />
-              <Route path="consultas" element={<ConsultasPage />} />
+      <OrganizationProvider>
+        <Suspense fallback={<PageLoader />}>
+          <Routes>
+            {/* Public routes */}
+            <Route element={<PublicLayout />}>
+              <Route index element={<HomePage />} />
+              <Route path="propiedades" element={<SearchResultsPage />} />
+              <Route path="propiedades/:slug" element={<PropertyDetailPage />} />
+              <Route path="favoritos" element={<FavoritesPage />} />
+              <Route path="comparar" element={<ComparePage />} />
+              <Route path="contacto" element={<ContactPage />} />
             </Route>
-          </Route>
-          {/* 404 catch-all */}
-          <Route element={<PublicLayout />}>
-            <Route path="*" element={<NotFoundPage />} />
-          </Route>
-        </Routes>
-      </Suspense>
+
+            {/* Admin login (sin layout admin) */}
+            <Route path="admin/login" element={<LoginPage />} />
+
+            {/* Admin routes (protegidas) */}
+            <Route element={<AuthGuard />}>
+              <Route path="admin" element={<AdminLayout />}>
+                <Route index element={<DashboardPage />} />
+                <Route path="propiedades" element={<PropertiesListPage />} />
+                <Route path="propiedades/nueva" element={<PropertyEditPage />} />
+                <Route path="propiedades/:id" element={<PropertyEditPage />} />
+                <Route path="configuracion" element={<SettingsPage />} />
+                <Route path="consultas" element={<ConsultasPage />} />
+              </Route>
+            </Route>
+            {/* 404 catch-all */}
+            <Route element={<PublicLayout />}>
+              <Route path="*" element={<NotFoundPage />} />
+            </Route>
+          </Routes>
+        </Suspense>
+      </OrganizationProvider>
       <Toaster
         position="top-right"
         toastOptions={{

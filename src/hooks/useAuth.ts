@@ -19,6 +19,20 @@ export function useAuth() {
   })
 
   useEffect(() => {
+    async function fetchProfile(userId: string) {
+      const { data } = await supabase
+        .from('inmob_usuarios')
+        .select('*')
+        .eq('id', userId)
+        .single()
+
+      setState((prev) => ({
+        ...prev,
+        profile: data,
+        loading: false,
+      }))
+    }
+
     // Get initial session
     supabase.auth.getSession().then(({ data: { session } }) => {
       setState((prev) => ({
@@ -53,20 +67,6 @@ export function useAuth() {
 
     return () => subscription.unsubscribe()
   }, [])
-
-  async function fetchProfile(userId: string) {
-    const { data } = await supabase
-      .from('inmob_usuarios')
-      .select('*')
-      .eq('id', userId)
-      .single()
-
-    setState((prev) => ({
-      ...prev,
-      profile: data,
-      loading: false,
-    }))
-  }
 
   async function signIn(email: string, password: string) {
     const { error } = await supabase.auth.signInWithPassword({ email, password })

@@ -1,8 +1,8 @@
 import { useEffect, useState } from 'react'
 import { Link } from 'react-router'
 import { Bed, Bath, Maximize, MapPin, Heart, GitCompareArrows } from 'lucide-react'
-import Badge, { getOperacionBadgeVariant } from '@/components/ui/Badge'
-import { formatPrice, formatSuperficie } from '@/lib/formatters'
+import Badge from '@/components/ui/Badge'
+import { formatPrice, formatSuperficie, getOperacionBadgeVariant } from '@/lib/formatters'
 import { TIPO_OPERACION_LABELS, TIPO_PROPIEDAD_LABELS } from '@/lib/constants'
 import { useFavoritesStore } from '@/store/favoritesStore'
 import { useCompareStore } from '@/store/compareStore'
@@ -91,7 +91,7 @@ export default function PropertyCard({ property, className = '', index }: Proper
             className={`flex h-8 w-8 items-center justify-center rounded-full backdrop-blur-sm transition-all ${
               isComparing
                 ? 'bg-primary text-white'
-                : 'bg-white/80 text-text-secondary hover:bg-white hover:text-primary'
+                : 'bg-bg-card/80 text-text-secondary hover:bg-bg-card hover:text-primary'
             } ${!isComparing && !canAddMore ? 'opacity-40 cursor-not-allowed' : ''}`}
           >
             <GitCompareArrows size={16} />
@@ -102,7 +102,7 @@ export default function PropertyCard({ property, className = '', index }: Proper
             className={`flex h-8 w-8 items-center justify-center rounded-full backdrop-blur-sm transition-all ${
               isFavorite
                 ? 'bg-red-500 text-white'
-                : 'bg-white/80 text-text-secondary hover:bg-white hover:text-red-500'
+                : 'bg-bg-card/80 text-text-secondary hover:bg-bg-card hover:text-red-500'
             }`}
           >
             <Heart size={16} fill={isFavorite ? 'currentColor' : 'none'} />

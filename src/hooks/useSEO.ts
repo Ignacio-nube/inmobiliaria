@@ -1,4 +1,5 @@
 import { useEffect } from 'react'
+import { useOrganization } from '@/contexts/OrganizationContext'
 
 interface SEOProps {
   title?: string
@@ -10,7 +11,7 @@ interface SEOProps {
   canonical?: string
 }
 
-const SITE_NAME = 'Rosario Propiedades'
+const DEFAULT_SITE_NAME = 'Rosario Propiedades'
 const DEFAULT_DESCRIPTION = 'Plataforma inmobiliaria profesional - Encontrá tu próximo hogar en Rosario y alrededores'
 
 function setMetaTag(name: string, content: string, attribute: 'name' | 'property' = 'name') {
@@ -35,16 +36,20 @@ function setCanonical(href: string) {
 
 export function useSEO({
   title,
+  siteName: siteNameProp,
   description = DEFAULT_DESCRIPTION,
   ogTitle,
   ogDescription,
   ogImage,
   ogType = 'website',
   canonical,
-}: SEOProps = {}) {
+}: SEOProps & { siteName?: string } = {}) {
+  const { organization } = useOrganization()
+  const siteName = siteNameProp ?? organization?.nombre ?? DEFAULT_SITE_NAME
+
   useEffect(() => {
     // Title
-    const fullTitle = title ? `${title} | ${SITE_NAME}` : SITE_NAME
+    const fullTitle = title ? `${title} | ${siteName}` : siteName
     document.title = fullTitle
 
     // Basic meta
@@ -54,7 +59,7 @@ export function useSEO({
     setMetaTag('og:title', ogTitle || fullTitle, 'property')
     setMetaTag('og:description', ogDescription || description, 'property')
     setMetaTag('og:type', ogType, 'property')
-    setMetaTag('og:site_name', SITE_NAME, 'property')
+    setMetaTag('og:site_name', siteName, 'property')
 
     if (ogImage) {
       setMetaTag('og:image', ogImage, 'property')
@@ -72,8 +77,8 @@ export function useSEO({
 
     return () => {
       // Reset to default on unmount
-      document.title = SITE_NAME
+      document.title = siteName
       setMetaTag('description', DEFAULT_DESCRIPTION)
     }
-  }, [title, description, ogTitle, ogDescription, ogImage, ogType, canonical])
+  }, [title, siteName, description, ogTitle, ogDescription, ogImage, ogType, canonical])
 }

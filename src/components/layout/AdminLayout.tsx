@@ -9,8 +9,16 @@ import {
   X,
   MessageSquare,
 } from 'lucide-react'
-import { useState } from 'react'
+import { useState, Suspense } from 'react'
 import { useAuth } from '@/hooks/useAuth'
+
+function AdminPageLoader() {
+  return (
+    <div className="flex min-h-[400px] w-full items-center justify-center">
+      <div className="h-8 w-8 animate-spin rounded-full border-4 border-primary border-t-transparent" />
+    </div>
+  )
+}
 
 export default function AdminLayout() {
   const [sidebarOpen, setSidebarOpen] = useState(false)
@@ -31,16 +39,16 @@ export default function AdminLayout() {
   ]
 
   return (
-    <div className="flex min-h-screen bg-bg-subtle">
+    <div className="flex h-screen overflow-hidden bg-bg-subtle">
       {/* Sidebar Desktop */}
       <aside className="hidden w-64 flex-col border-r border-border bg-bg-card lg:flex">
-        <div className="flex h-16 items-center border-b border-border px-6">
+        <div className="flex h-16 shrink-0 items-center border-b border-border px-6">
           <Link to="/admin" className="text-lg font-bold text-primary">
             Admin Panel
           </Link>
         </div>
 
-        <nav className="flex-1 space-y-1 p-4">
+        <nav className="flex-1 overflow-y-auto space-y-1 p-4">
           {navItems.map((item) => (
             <NavLink
               key={item.to}
@@ -60,8 +68,8 @@ export default function AdminLayout() {
           ))}
         </nav>
 
-        <div className="border-t border-border p-4">
-          <div className="mb-3 text-xs text-text-tertiary">
+        <div className="shrink-0 border-t border-border p-4">
+          <div className="mb-3 truncate text-xs text-text-tertiary">
             {profile?.email}
           </div>
           <button
@@ -85,11 +93,11 @@ export default function AdminLayout() {
 
       {/* Sidebar Mobile */}
       <aside
-        className={`fixed inset-y-0 left-0 z-50 w-64 transform border-r border-border bg-bg-card transition-transform duration-300 lg:hidden ${
+        className={`fixed inset-y-0 left-0 z-50 flex w-64 flex-col transform border-r border-border bg-bg-card transition-transform duration-300 lg:hidden ${
           sidebarOpen ? 'translate-x-0' : '-translate-x-full'
         }`}
       >
-        <div className="flex h-16 items-center justify-between border-b border-border px-6">
+        <div className="flex h-16 shrink-0 items-center justify-between border-b border-border px-6">
           <Link to="/admin" className="text-lg font-bold text-primary">
             Admin Panel
           </Link>
@@ -102,7 +110,7 @@ export default function AdminLayout() {
           </button>
         </div>
 
-        <nav className="flex-1 space-y-1 p-4">
+        <nav className="flex-1 overflow-y-auto space-y-1 p-4">
           {navItems.map((item) => (
             <NavLink
               key={item.to}
@@ -123,7 +131,7 @@ export default function AdminLayout() {
           ))}
         </nav>
 
-        <div className="border-t border-border p-4">
+        <div className="shrink-0 border-t border-border p-4">
           <button
             type="button"
             onClick={handleSignOut}
@@ -136,9 +144,9 @@ export default function AdminLayout() {
       </aside>
 
       {/* Main content */}
-      <div className="flex flex-1 flex-col">
+      <div className="flex flex-1 flex-col overflow-hidden">
         {/* Top bar mobile */}
-        <header className="flex h-16 items-center gap-4 border-b border-border bg-bg-card px-4 lg:px-8">
+        <header className="flex h-16 shrink-0 items-center gap-4 border-b border-border bg-bg-card px-4 lg:px-8">
           <button
             type="button"
             className="rounded-lg p-2 text-text-secondary hover:bg-bg-subtle lg:hidden"
@@ -150,7 +158,7 @@ export default function AdminLayout() {
           <div className="flex-1" />
           <Link
             to="/"
-            className="text-sm text-text-secondary hover:text-primary"
+            className="text-sm text-text-secondary hover:text-primary transition-colors"
             target="_blank"
           >
             Ver sitio
@@ -158,8 +166,10 @@ export default function AdminLayout() {
         </header>
 
         {/* Page content */}
-        <main className="flex-1 p-4 lg:p-8">
-          <Outlet />
+        <main className="flex-1 overflow-y-auto p-4 lg:p-8">
+          <Suspense fallback={<AdminPageLoader />}>
+            <Outlet />
+          </Suspense>
         </main>
       </div>
     </div>

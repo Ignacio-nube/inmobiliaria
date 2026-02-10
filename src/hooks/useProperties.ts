@@ -6,7 +6,10 @@ import type { PropiedadConImagenes } from '@/types/property'
 import type { PaginatedResult } from '@/types/filters'
 
 export function useProperties(organizacionId?: string) {
-  const { filters, sortBy, page } = useFilterStore()
+  const filters = useFilterStore((s) => s.filters)
+  const sortBy = useFilterStore((s) => s.sortBy)
+  const page = useFilterStore((s) => s.page)
+  
   const [result, setResult] = useState<PaginatedResult<PropiedadConImagenes>>({
     data: [],
     count: 0,
@@ -18,6 +21,7 @@ export function useProperties(organizacionId?: string) {
   const [error, setError] = useState<string | null>(null)
 
   const fetchProperties = useCallback(async () => {
+    // ... logic remains same but use filters, sortBy, page from above
     setLoading(true)
     setError(null)
 

@@ -16,6 +16,7 @@
   --color-primary-700: #173d55;
   --color-primary-800: #133548;
   --color-primary-900: #0e2736;
+  --color-primary-950: #07141b;
   --color-primary: #1b4965;
 
   /* Secundario - Verde Esmeralda */
@@ -254,6 +255,93 @@
 }
 
 /* ============================================
+   GLOBAL COMPONENTS & THEME OVERRIDES
+   ============================================ */
+
+.hero-search-form {
+  background: rgba(255, 255, 255, 0.95);
+  border-radius: 1rem;
+}
+
+@media (min-width: 640px) {
+  .hero-search-form {
+    border-radius: 9999px;
+  }
+}
+
+.hero-search-input {
+  background: var(--color-bg-subtle);
+  color: var(--color-text-primary);
+  border-radius: 0.5rem;
+}
+
+@media (min-width: 640px) {
+  .hero-search-input {
+    border-radius: 9999px;
+  }
+}
+
+.hero-search-button {
+  border-radius: 0.5rem;
+}
+
+@media (min-width: 640px) {
+  .hero-search-button {
+    border-radius: 9999px;
+  }
+}
+
+/* Base contrast fix for bg-primary-50 and primary containers */
+[class*="bg-primary-50"] {
+  background-color: color-mix(in srgb, var(--color-primary) 12%, white) !important;
+  color: var(--color-primary-800) !important;
+}
+
+/* Force high contrast for primary containers (stats, footer, etc) */
+.bg-primary-900,
+.bg-primary-950 {
+  color: #ffffff !important;
+}
+
+.bg-primary-900 h1, .bg-primary-900 h2, .bg-primary-900 h3, .bg-primary-900 h4, .bg-primary-900 h5, .bg-primary-900 h6,
+.bg-primary-950 h1, .bg-primary-950 h2, .bg-primary-950 h3, .bg-primary-950 h4, .bg-primary-950 h5, .bg-primary-950 h6 {
+  color: #ffffff !important;
+}
+
+.bg-primary-900 .text-primary-200,
+.bg-primary-950 .text-primary-200 {
+  color: color-mix(in srgb, white 70%, transparent) !important;
+}
+
+.bg-primary-900 .text-primary-300,
+.bg-primary-950 .text-primary-300 {
+  color: color-mix(in srgb, white 50%, transparent) !important;
+}
+
+.bg-primary-900 a:hover,
+.bg-primary-950 a:hover {
+  color: #ffffff !important;
+}
+
+/* Ensure bg-primary-900/950 are always dark enough for white text */
+.bg-primary-900 {
+  background-color: color-mix(in srgb, var(--color-primary) 90%, black) !important;
+}
+
+.bg-primary-950 {
+  background-color: color-mix(in srgb, var(--color-primary) 95%, black) !important;
+}
+
+/* Compare Mockup Styles */
+.mockup-compare-card {
+  transition: all 0.3s ease;
+}
+
+.theme-minimal-bento .mockup-compare-card {
+  border-radius: 0px !important;
+}
+
+/* ============================================
    ACCESSIBILITY - Reduced Motion
    ============================================ */
 
@@ -267,3 +355,970 @@
     scroll-behavior: auto !important;
   }
 }
+
+/* ============================================
+   LIQUID GLASS THEME
+   Activated via .theme-liquid-glass on <html>
+   ============================================ */
+
+/* Animated gradient background */
+@keyframes liquid-gradient {
+  0%, 100% {
+    background-position: 0% 50%;
+  }
+  25% {
+    background-position: 50% 0%;
+  }
+  50% {
+    background-position: 100% 50%;
+  }
+  75% {
+    background-position: 50% 100%;
+  }
+}
+
+@keyframes liquid-orb-1 {
+  0%, 100% { transform: translate(0, 0) scale(1); }
+  33% { transform: translate(30px, -50px) scale(1.1); }
+  66% { transform: translate(-20px, 20px) scale(0.9); }
+}
+
+@keyframes liquid-orb-2 {
+  0%, 100% { transform: translate(0, 0) scale(1); }
+  33% { transform: translate(-40px, 30px) scale(1.05); }
+  66% { transform: translate(30px, -40px) scale(0.95); }
+}
+
+.theme-liquid-glass {
+  /* Dark base with animated gradient */
+  background:
+    linear-gradient(
+      135deg,
+      #0a0a1a 0%,
+      #0f1628 25%,
+      #0d1117 50%,
+      #10051a 75%,
+      #0a0a1a 100%
+    );
+  background-size: 400% 400%;
+  animation: liquid-gradient 20s ease infinite;
+}
+
+/* Ambient background orbs */
+.theme-liquid-glass body::before,
+.theme-liquid-glass body::after {
+  content: '';
+  position: fixed;
+  border-radius: 50%;
+  z-index: 0;
+  pointer-events: none;
+  filter: blur(120px);
+  opacity: 0.15;
+}
+
+.theme-liquid-glass body::before {
+  width: 600px;
+  height: 600px;
+  background: var(--color-primary, #1b4965);
+  top: -200px;
+  right: -100px;
+  animation: liquid-orb-1 15s ease-in-out infinite;
+}
+
+.theme-liquid-glass body::after {
+  width: 500px;
+  height: 500px;
+  background: var(--color-secondary, #2d9b6e);
+  bottom: -150px;
+  left: -100px;
+  animation: liquid-orb-2 18s ease-in-out infinite;
+}
+
+.theme-liquid-glass body {
+  position: relative;
+  z-index: 1;
+}
+
+/* Glass card effect - applies to all bordered cards */
+.theme-liquid-glass .border-border {
+  border-color: rgba(255, 255, 255, 0.10);
+}
+
+.theme-liquid-glass .bg-bg-card {
+  background: rgba(255, 255, 255, 0.06);
+  backdrop-filter: blur(20px) saturate(180%);
+  -webkit-backdrop-filter: blur(20px) saturate(180%);
+}
+
+/* Header gets extra glass treatment */
+.theme-liquid-glass header.sticky {
+  background: rgba(15, 15, 26, 0.85); /* Slightly more opaque */
+  backdrop-filter: blur(24px) saturate(180%);
+  -webkit-backdrop-filter: blur(24px) saturate(180%);
+  border-color: rgba(255, 255, 255, 0.15);
+}
+
+/* Fix mobile menu cascade dropdown visibility in glass mode */
+.theme-liquid-glass header nav:not(.hidden) {
+  background: rgba(15, 15, 26, 0.95) !important;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.theme-liquid-glass header nav a {
+  color: #f0f0f5 !important;
+}
+
+.theme-liquid-glass header nav a.bg-primary-50 {
+  background: rgba(255, 255, 255, 0.1) !important;
+  color: #ffffff !important;
+}
+
+/* Footer dark glass - CONTRAST FIX */
+.theme-liquid-glass .bg-primary-900,
+.theme-liquid-glass .bg-primary-950 {
+  background: rgba(10, 10, 20, 0.95) !important; /* Darker background */
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  border-top: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.theme-liquid-glass .bg-primary-900 .text-primary-200,
+.theme-liquid-glass .bg-primary-900 .text-sm.text-primary-200 {
+  color: #a0a0b8 !important; /* Lighter/higher contrast */
+}
+
+.theme-liquid-glass .bg-primary-900 .text-primary-300 {
+  color: #6b6b80 !important;
+}
+
+/* Subtle background areas */
+.theme-liquid-glass .bg-bg-subtle {
+  background: rgba(255, 255, 255, 0.06);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+}
+
+/* Input fields in glass mode - CONTRAST FIX */
+.theme-liquid-glass input:not([type="color"]):not([type="checkbox"]):not([type="radio"]),
+.theme-liquid-glass select,
+.theme-liquid-glass textarea {
+  background: rgba(255, 255, 255, 0.12) !important; /* Increased opacity */
+  border-color: rgba(255, 255, 255, 0.15) !important;
+  color: #ffffff !important; /* Pure white text */
+  text-shadow: 0 1px 2px rgba(0,0,0,0.5); /* Better readability */
+}
+
+.theme-liquid-glass input::placeholder,
+.theme-liquid-glass select::placeholder,
+.theme-liquid-glass textarea::placeholder {
+  color: #b0b0cc !important; /* Lighter placeholder */
+  opacity: 1;
+}
+
+/* Liquid Glass Hero Search Fix */
+.theme-liquid-glass .hero-search-form {
+  background: rgba(15, 15, 26, 0.7) !important;
+  backdrop-filter: blur(20px) saturate(180%) !important;
+  border: 1px solid rgba(255, 255, 255, 0.15) !important;
+}
+
+.theme-liquid-glass .hero-search-input {
+  background: rgba(255, 255, 255, 0.12) !important;
+  color: #ffffff !important;
+  border: 1px solid rgba(255, 255, 255, 0.1) !important;
+}
+
+.theme-liquid-glass .hero-search-input option {
+  background: #0f0f1a !important;
+  color: #ffffff !important;
+}
+
+/* Badge adjustments & Icon container contrast */
+.theme-liquid-glass [class*="bg-primary-50"] {
+  background: rgba(255, 255, 255, 0.2) !important;
+  color: #ffffff !important;
+}
+
+.theme-liquid-glass [class*="bg-primary-50"] svg {
+  stroke: #ffffff !important;
+}
+
+/* Hover states for glass */
+.theme-liquid-glass .hover\:bg-bg-subtle:hover,
+.theme-liquid-glass [class*="hover:bg-bg-subtle"]:hover {
+  background: rgba(255, 255, 255, 0.06);
+}
+
+/* Card hover lift with glow */
+.theme-liquid-glass .hover\:shadow-card-hover:hover,
+.theme-liquid-glass [class*="hover:shadow-card-hover"]:hover {
+  box-shadow:
+    0 8px 40px rgba(0, 0, 0, 0.4),
+    inset 0 1px 0 rgba(255, 255, 255, 0.12),
+    0 0 30px rgba(var(--glass-glow-rgb, 27, 73, 101), 0.15);
+}
+
+/* Primary buttons get a subtle glow & Contrast Fix */
+.theme-liquid-glass .bg-primary {
+  box-shadow: 0 0 20px rgba(var(--glass-glow-rgb, 27, 73, 101), 0.3);
+  color: #ffffff !important; /* Ensure white text */
+  text-shadow: 0 1px 1px rgba(0,0,0,0.2);
+}
+
+/* Skeleton shimmer in glass mode */
+.theme-liquid-glass .skeleton-shimmer {
+  background: linear-gradient(
+    90deg,
+    rgba(255, 255, 255, 0.03) 25%,
+    rgba(255, 255, 255, 0.08) 50%,
+    rgba(255, 255, 255, 0.03) 75%
+  );
+  background-size: 200% 100%;
+}
+
+/* Dividers */
+.theme-liquid-glass .divide-border > :not(:first-child) {
+  border-color: rgba(255, 255, 255, 0.06);
+}
+
+.theme-liquid-glass .border-t.border-border,
+.theme-liquid-glass .border-b.border-border {
+  border-color: rgba(255, 255, 255, 0.06);
+}
+
+/* Text color overrides for readability on dark */
+.theme-liquid-glass .text-text-primary {
+  color: #f0f0f5;
+}
+
+.theme-liquid-glass .text-text-secondary {
+  color: #a0a0b8;
+}
+
+.theme-liquid-glass .text-text-tertiary {
+  color: #6b6b80;
+}
+
+/* Links in glass mode */
+.theme-liquid-glass a {
+  color: var(--color-primary-400, #5499ba);
+}
+
+.theme-liquid-glass a:hover {
+  color: var(--color-primary-300, #74adc8);
+}
+
+/* Footer text adjustments */
+.theme-liquid-glass .text-primary-200 {
+  color: rgba(255, 255, 255, 0.5);
+}
+
+.theme-liquid-glass .text-primary-300 {
+  color: rgba(255, 255, 255, 0.4);
+}
+
+.theme-liquid-glass .border-primary-700 {
+  border-color: rgba(255, 255, 255, 0.06);
+}
+
+/* Scrollbar styling for glass theme */
+.theme-liquid-glass ::-webkit-scrollbar {
+  width: 8px;
+}
+
+.theme-liquid-glass ::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+.theme-liquid-glass ::-webkit-scrollbar-thumb {
+  background: rgba(255, 255, 255, 0.12);
+  border-radius: 4px;
+}
+
+.theme-liquid-glass ::-webkit-scrollbar-thumb:hover {
+  background: rgba(255, 255, 255, 0.2);
+}
+
+/* ============================================
+   FUTURISTIC THEME
+   Activated via .theme-futuristic on <html>
+   ============================================ */
+
+.theme-futuristic {
+  /* Dark Tech Background */
+  background: #030712;
+  background-image: 
+    radial-gradient(at 0% 0%, rgba(99, 102, 241, 0.15) 0px, transparent 50%),
+    radial-gradient(at 100% 0%, rgba(168, 85, 247, 0.15) 0px, transparent 50%);
+  background-attachment: fixed;
+}
+
+/* Grid overlay */
+.theme-futuristic body::before {
+  content: '';
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-image: 
+    linear-gradient(rgba(255, 255, 255, 0.03) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(255, 255, 255, 0.03) 1px, transparent 1px);
+  background-size: 50px 50px;
+  z-index: 0;
+  pointer-events: none;
+  mask-image: radial-gradient(circle at center, black 40%, transparent 100%);
+}
+
+.theme-futuristic body {
+  position: relative;
+  z-index: 1;
+}
+
+/* Cards: Tech look */
+.theme-futuristic .bg-bg-card {
+  background: rgba(17, 24, 39, 0.6);
+  backdrop-filter: blur(12px);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  box-shadow: 0 0 0 1px rgba(0,0,0,1), 0 4px 6px -1px rgba(0,0,0,0.5);
+}
+
+/* Header */
+.theme-futuristic header.sticky {
+  background: rgba(3, 7, 18, 0.9);
+  backdrop-filter: blur(16px);
+  border-bottom: 1px solid rgba(255, 255, 255, 0.15);
+}
+
+/* Fix mobile menu cascade dropdown visibility in futuristic mode */
+.theme-futuristic header nav:not(.hidden) {
+  background: #030712 !important;
+}
+
+.theme-futuristic header nav a {
+  color: #f8fafb !important;
+}
+
+.theme-futuristic header nav a.bg-primary-50 {
+  background: rgba(99, 102, 241, 0.2) !important;
+  color: #ffffff !important;
+}
+
+/* Footer - CONTRAST FIX */
+.theme-futuristic .bg-primary-900,
+.theme-futuristic .bg-primary-950 {
+  background: #010413 !important; /* Extremely dark */
+  border-top: 1px solid rgba(99, 102, 241, 0.2);
+}
+
+.theme-futuristic .bg-primary-900 .text-primary-200 {
+  color: #94a3b8 !important; /* slate-400 */
+}
+
+.theme-futuristic .bg-primary-900 .text-primary-300 {
+  color: #64748b !important; /* slate-500 */
+}
+
+/* Inputs: Pill shaped & glowing focus - CONTRAST FIX */
+.theme-futuristic input:not([type="color"]):not([type="checkbox"]):not([type="radio"]),
+.theme-futuristic select,
+.theme-futuristic textarea {
+  background: rgba(2, 6, 23, 0.95) !important; /* Almost opaque */
+  border: 1px solid rgba(255, 255, 255, 0.15) !important;
+  color: #ffffff !important;
+  border-radius: 9999px !important; /* Pill shape inputs */
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.theme-futuristic textarea {
+  border-radius: 24px !important;
+}
+
+.theme-futuristic input:focus,
+.theme-futuristic select:focus,
+.theme-futuristic textarea:focus {
+  border-color: #6366f1 !important;
+  box-shadow: 0 0 0 4px rgba(99, 102, 241, 0.15) !important;
+}
+
+/* Primary buttons: Pill shaped with glow - CONTRAST FIX */
+.theme-futuristic .bg-primary {
+  border-radius: 9999px !important;
+  background: linear-gradient(135deg, #4f46e5 0%, #7c3aed 100%) !important;
+  color: #ffffff !important;
+  border: 1px solid rgba(255,255,255,0.2) !important;
+  box-shadow: 0 0 15px rgba(124, 58, 237, 0.4);
+  text-shadow: 0 1px 2px rgba(0,0,0,0.3);
+  font-weight: 600;
+  letter-spacing: 0.025em;
+  transition: all 0.3s ease;
+}
+
+.theme-futuristic .bg-primary:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 0 25px rgba(124, 58, 237, 0.5);
+}
+
+/* Text */
+.theme-futuristic .text-text-primary { color: #f8fafb; }
+.theme-futuristic .text-text-secondary { color: #9ca3af; }
+.theme-futuristic .text-text-tertiary { color: #6b7280; }
+
+/* Futuristic Hero Search Fix */
+.theme-futuristic .hero-search-form {
+  background: rgba(3, 7, 18, 0.8) !important;
+  backdrop-filter: blur(16px) !important;
+  border: 1px solid rgba(99, 102, 241, 0.3) !important;
+  box-shadow: 0 0 30px rgba(99, 102, 241, 0.1) !important;
+}
+
+.theme-futuristic .hero-search-input {
+  background: rgba(2, 6, 23, 0.9) !important;
+  color: #ffffff !important;
+  border: 1px solid rgba(255, 255, 255, 0.1) !important;
+}
+
+.theme-futuristic .hero-search-input option {
+  background: #030712 !important;
+  color: #ffffff !important;
+}
+
+/* Icon containers and badges in futuristic mode */
+.theme-futuristic [class*="bg-primary-50"] {
+  background: rgba(99, 102, 241, 0.3) !important;
+  color: #ffffff !important;
+}
+
+.theme-futuristic [class*="bg-primary-50"] svg {
+  stroke: #ffffff !important;
+}
+
+/* Links */
+.theme-futuristic a {
+  color: #818cf8;
+  text-decoration: none;
+  background-image: linear-gradient(#818cf8, #818cf8);
+  background-position: 0% 100%;
+  background-repeat: no-repeat;
+  background-size: 0% 1px;
+  transition: background-size 0.3s;
+}
+
+.theme-futuristic a:hover {
+  background-size: 100% 1px;
+  color: #a5b4fc;
+}
+
+/* Scrollbar */
+.theme-futuristic ::-webkit-scrollbar { width: 6px; }
+.theme-futuristic ::-webkit-scrollbar-track { background: #030712; }
+.theme-futuristic ::-webkit-scrollbar-thumb {
+  background: #374151;
+  border-radius: 99px;
+}
+.theme-futuristic ::-webkit-scrollbar-thumb:hover { background: #4b5563; }
+
+/* ============================================
+   MINIMAL BENTO THEME
+   Activated via .theme-minimal-bento on <html>
+   ============================================ */
+
+.theme-minimal-bento {
+  /* Pattern Background */
+  background-color: #f9fafb;
+  background-image: radial-gradient(#e5e7eb 1px, transparent 1px);
+  background-size: 24px 24px;
+}
+
+.theme-minimal-bento body {
+  letter-spacing: -0.01em;
+}
+
+/* Card Styling: Bento Grid Style */
+.theme-minimal-bento .bg-bg-card {
+  border: 1px solid #e5e7eb;
+  box-shadow: none;
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.theme-minimal-bento .bg-bg-card:not(nav):not(header):hover {
+  transform: translateY(-2px);
+  box-shadow: 4px 4px 0 0 #000000;
+  border-color: #000000;
+}
+
+/* Header */
+.theme-minimal-bento header.sticky {
+  background: #ffffff;
+  backdrop-filter: none;
+  border-bottom: 2px solid #000000;
+}
+
+/* Fix mobile menu cascade dropdown visibility in bento mode */
+.theme-minimal-bento header nav:not(.hidden) {
+  background: #ffffff !important;
+  border-bottom: 2px solid #000000;
+}
+
+.theme-minimal-bento header nav a {
+  color: #000000 !important;
+  border-radius: 0 !important;
+}
+
+.theme-minimal-bento header nav a.bg-primary-50 {
+  background: #000000 !important;
+  color: #ffffff !important;
+}
+
+/* Inputs: Sharp & Contrast */
+.theme-minimal-bento input:not([type="color"]):not([type="checkbox"]):not([type="radio"]),
+.theme-minimal-bento select,
+.theme-minimal-bento textarea {
+  background: #ffffff !important;
+  border: 2px solid #e5e7eb !important;
+  color: #111827 !important;
+  border-radius: 0 !important;
+  font-weight: 500;
+}
+
+.theme-minimal-bento input:focus,
+.theme-minimal-bento select:focus,
+.theme-minimal-bento textarea:focus {
+  border-color: #000000 !important;
+  outline: none !important;
+  box-shadow: 4px 4px 0 0 rgba(0,0,0,0.1) !important;
+}
+
+.theme-minimal-bento input::placeholder,
+.theme-minimal-bento select::placeholder,
+.theme-minimal-bento textarea::placeholder {
+  color: #9ca3af !important;
+}
+
+/* Primary buttons: Brutalist - CONTRAST FIX */
+.theme-minimal-bento .bg-primary {
+  border-radius: 0 !important;
+  border: 2px solid #000000 !important;
+  background: #000000 !important; /* Force black */
+  color: #ffffff !important;
+  font-weight: 700;
+  text-transform: uppercase;
+  font-size: 0.875rem;
+  letter-spacing: 0.05em;
+  box-shadow: none;
+}
+
+.theme-minimal-bento .bg-primary:hover {
+  background: #ffffff !important;
+  color: #000000 !important;
+  border-color: #000000 !important;
+  box-shadow: 4px 4px 0 0 #000000 !important;
+  transform: translate(-2px, -2px);
+}
+
+.theme-minimal-bento button:not(.bg-primary):not(.bg-transparent) {
+  border-radius: 0 !important;
+}
+
+/* Secondary/Ghost buttons overrides */
+.theme-minimal-bento button.bg-transparent {
+  border-radius: 0 !important;
+  font-weight: 600;
+}
+
+/* Tags/Badges */
+.theme-minimal-bento [class*="bg-primary-50"] {
+  background: #f3f4f6;
+  border: 1px solid #e5e7eb;
+  color: #111827;
+  border-radius: 0;
+  font-weight: 600;
+}
+
+/* Footer */
+.theme-minimal-bento .bg-primary-900,
+.theme-minimal-bento .bg-primary-950 {
+  background: #000000;
+  color: #ffffff !important;
+  border-top: 4px solid #111827;
+}
+
+.theme-minimal-bento .bg-primary-900 h3,
+.theme-minimal-bento .bg-primary-900 h4 {
+  color: #ffffff !important;
+}
+
+.theme-minimal-bento .bg-primary-900 .text-primary-200 { color: #9ca3af; }
+.theme-minimal-bento .bg-primary-900 .text-primary-300 { color: #d1d5db; }
+
+/* Minimal Bento Hero Search Fix */
+.theme-minimal-bento .hero-search-form {
+  background: #ffffff !important;
+  border: 2px solid #000000 !important;
+  border-radius: 0px !important;
+  box-shadow: 8px 8px 0px 0px rgba(0,0,0,1) !important;
+}
+
+.theme-minimal-bento .hero-search-input {
+  background: #ffffff !important;
+  color: #000000 !important;
+  border: 2px solid #e5e7eb !important;
+  border-radius: 0px !important;
+}
+
+.theme-minimal-bento .hero-search-input:focus {
+  border-color: #000000 !important;
+}
+
+.theme-minimal-bento .hero-search-button {
+  border-radius: 0px !important;
+  border: 2px solid #000000 !important;
+}
+
+/* Icon containers and badges in bento mode */
+.theme-minimal-bento [class*="bg-primary-50"] {
+  background: #000000 !important;
+  color: #ffffff !important;
+  border-radius: 0px !important;
+}
+
+.theme-minimal-bento [class*="bg-primary-50"] svg {
+  stroke: #ffffff !important;
+}
+
+/* Scrollbar */
+.theme-minimal-bento ::-webkit-scrollbar { width: 10px; }
+.theme-minimal-bento ::-webkit-scrollbar-track { background: #f9fafb; border-left: 1px solid #e5e7eb; }
+.theme-minimal-bento ::-webkit-scrollbar-thumb {
+  background: #d1d5db;
+  border: 2px solid #f9fafb;
+}
+.theme-minimal-bento ::-webkit-scrollbar-thumb:hover { background: #9ca3af; }
+
+/* ============================================
+   NEO POP THEME (Neo-Brutalism / Pop)
+   Activated via .theme-neo-pop on <html>
+   ============================================ */
+
+.theme-neo-pop {
+  /* Vibrant, playful background */
+  background-color: #fefce8; /* Yellow-50 */
+  background-image: radial-gradient(#fbbf24 2px, transparent 2px); /* Yellow-400 dots */
+  background-size: 32px 32px;
+}
+
+.theme-neo-pop body {
+  letter-spacing: 0.01em;
+}
+
+/* Card Styling: Brutalist Pop */
+.theme-neo-pop .bg-bg-card {
+  border: 3px solid #000000;
+  box-shadow: 6px 6px 0 0 #000000;
+  border-radius: 12px;
+  background-color: #ffffff;
+  transition: transform 0.2s cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+
+.theme-neo-pop .bg-bg-card:not(nav):not(header):hover {
+  transform: translate(-2px, -2px);
+  box-shadow: 8px 8px 0 0 #000000;
+}
+
+/* Header */
+.theme-neo-pop header.sticky {
+  background: #ffffff;
+  border-bottom: 3px solid #000000;
+  box-shadow: 0 4px 0 0 rgba(0,0,0,0.1);
+}
+
+/* Fix mobile menu cascade dropdown visibility in neo-pop mode */
+.theme-neo-pop header nav:not(.hidden) {
+  background: #ffffff !important;
+  border-bottom: 3px solid #000000;
+  border-top: 3px solid #000000;
+}
+
+.theme-neo-pop header nav a {
+  color: #000000 !important;
+  font-weight: 700;
+}
+
+.theme-neo-pop header nav a.bg-primary-50 {
+  background: #fbbf24 !important; /* Yellow-400 */
+  color: #000000 !important;
+  border: 2px solid #000000;
+  box-shadow: 2px 2px 0 0 #000000;
+}
+
+/* Inputs: Pop style */
+.theme-neo-pop input:not([type="color"]):not([type="checkbox"]):not([type="radio"]),
+.theme-neo-pop select,
+.theme-neo-pop textarea {
+  background: #ffffff !important;
+  border: 3px solid #000000 !important;
+  color: #000000 !important;
+  border-radius: 8px !important;
+  font-weight: 600;
+  box-shadow: 3px 3px 0 0 #e5e7eb;
+}
+
+.theme-neo-pop input:focus,
+.theme-neo-pop select:focus,
+.theme-neo-pop textarea:focus {
+  outline: none !important;
+  box-shadow: 4px 4px 0 0 #000000 !important;
+  transform: translate(-1px, -1px);
+}
+
+/* Primary buttons: Neo Pop */
+.theme-neo-pop .bg-primary {
+  background: #fbbf24 !important; /* Amber-400 */
+  color: #000000 !important;
+  border: 3px solid #000000 !important;
+  border-radius: 8px !important;
+  font-weight: 800;
+  box-shadow: 4px 4px 0 0 #000000;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  transition: all 0.1s;
+}
+
+.theme-neo-pop .bg-primary:hover {
+  transform: translate(2px, 2px);
+  box-shadow: 2px 2px 0 0 #000000;
+  background: #fcd34d !important; /* Amber-300 */
+}
+
+.theme-neo-pop .bg-primary:active {
+  transform: translate(4px, 4px);
+  box-shadow: 0 0 0 0 #000000;
+}
+
+/* Secondary Buttons / Outlines */
+.theme-neo-pop button.border-2 {
+  border: 3px solid #000000 !important;
+  color: #000000 !important;
+  font-weight: 700;
+  background: #ffffff;
+  box-shadow: 4px 4px 0 0 #e5e7eb;
+  border-radius: 8px;
+}
+
+.theme-neo-pop button.border-2:hover {
+  box-shadow: 4px 4px 0 0 #000000;
+  background: #f3f4f6;
+}
+
+/* Tags/Badges */
+.theme-neo-pop [class*="bg-primary-50"] {
+  background: #fffbeb; /* Amber-50 */
+  border: 2px solid #000000;
+  color: #000000;
+  font-weight: 700;
+  border-radius: 999px;
+  box-shadow: 2px 2px 0 0 #000000;
+}
+
+/* Footer */
+.theme-neo-pop .bg-primary-900,
+.theme-neo-pop .bg-primary-950 {
+  background: #000000 !important;
+  color: #ffffff;
+  border-top: 5px solid #fbbf24;
+}
+
+.theme-neo-pop .bg-primary-900 .text-primary-200 { color: #d1d5db; }
+.theme-neo-pop .bg-primary-900 .text-primary-300 { color: #9ca3af; }
+
+/* Hero Search Form */
+.theme-neo-pop .hero-search-form {
+  background: #ffffff !important;
+  border: 4px solid #000000 !important;
+  border-radius: 16px !important;
+  box-shadow: 12px 12px 0 0 #fbbf24 !important; /* Large yellow shadow */
+  padding: 1.5rem !important;
+}
+
+.theme-neo-pop .hero-search-input {
+  border: 3px solid #000000 !important;
+  background: #ffffff !important;
+  color: #000000 !important;
+  box-shadow: 4px 4px 0 0 #e5e7eb !important;
+}
+
+.theme-neo-pop .hero-search-button {
+  border-radius: 8px !important;
+  border: 3px solid #000000 !important;
+  box-shadow: 4px 4px 0 0 #000000 !important;
+}
+
+/* Scrollbar */
+.theme-neo-pop ::-webkit-scrollbar { width: 12px; }
+.theme-neo-pop ::-webkit-scrollbar-track { background: #fefce8; border-left: 3px solid #000000; }
+.theme-neo-pop ::-webkit-scrollbar-thumb {
+  background: #fbbf24;
+  border: 3px solid #000000;
+  border-radius: 99px;
+}
+.theme-neo-pop ::-webkit-scrollbar-thumb:hover { background: #f59e0b; }
+
+/* Custom Text Selection */
+.theme-neo-pop ::selection {
+  background: #000000;
+  color: #fbbf24;
+}
+
+/* ============================================
+   LUXURY SERIF THEME (Elegant / Magazine)
+   Activated via .theme-luxury on <html>
+   ============================================ */
+
+.theme-luxury {
+  /* Clean Stone Background */
+  background-color: #fafaf9; /* Stone 50 */
+}
+
+/* Typography Overrides - Elegant Serif */
+.theme-luxury h1,
+.theme-luxury h2,
+.theme-luxury h3,
+.theme-luxury h4,
+.theme-luxury h5,
+.theme-luxury h6 {
+  font-family: "Playfair Display", "Georgia", serif;
+  font-weight: 500;
+  letter-spacing: -0.02em;
+  color: inherit; /* Allow parent to override color (critical for footers) */
+}
+
+.theme-luxury body {
+  font-family: "Inter", sans-serif; /* Keep body legible */
+  letter-spacing: 0.01em;
+}
+
+/* Navbar: Sticky but refined */
+.theme-luxury header.sticky {
+  background: rgba(255, 255, 255, 0.95);
+  backdrop-filter: blur(8px);
+  border-bottom: 1px solid rgba(0,0,0,0.05);
+}
+
+.theme-luxury header nav:not(.hidden) {
+  background: #ffffff !important;
+  border-bottom: 1px solid rgba(0,0,0,0.05);
+}
+
+.theme-luxury header nav a {
+  font-family: "Inter", sans-serif;
+  text-transform: uppercase;
+  font-size: 0.75rem;
+  letter-spacing: 0.1em;
+  font-weight: 500;
+}
+
+/* Button & Links: Understated */
+.theme-luxury .bg-primary {
+  background: #1c1917 !important; /* Stone 900 */
+  color: #ffffff !important;
+  border-radius: 4px;
+  font-family: "Inter", sans-serif;
+  letter-spacing: 0.05em;
+  font-weight: 500;
+  text-transform: uppercase;
+  font-size: 0.8rem;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+  transition: all 0.4s ease;
+}
+
+.theme-luxury .bg-primary:hover {
+  background: #44403c !important; /* Stone 700 */
+  transform: translateY(-1px);
+  box-shadow: 0 8px 16px rgba(0,0,0,0.1);
+}
+
+/* Card Styling: Floating, minimal */
+.theme-luxury .bg-bg-card {
+  border: 1px solid rgba(0,0,0,0.04);
+  box-shadow: 0 4px 20px rgba(0,0,0,0.03);
+  border-radius: 8px;
+  transition: all 0.5s ease;
+}
+
+.theme-luxury .bg-bg-card:not(nav):not(header):hover {
+  transform: translateY(-4px);
+  box-shadow: 0 20px 40px rgba(0,0,0,0.08);
+}
+
+/* Inputs: Understated lines */
+.theme-luxury input:not([type="color"]):not([type="checkbox"]):not([type="radio"]),
+.theme-luxury select,
+.theme-luxury textarea {
+  background: transparent !important;
+  border: none !important;
+  border-bottom: 1px solid #d6d3d1 !important; /* Stone 300 */
+  border-radius: 0 !important;
+  padding-left: 0 !important;
+  transition: border-color 0.3s ease;
+}
+
+.theme-luxury input:focus,
+.theme-luxury select:focus,
+.theme-luxury textarea:focus {
+  border-bottom-color: #1c1917 !important; /* Stone 900 */
+  box-shadow: none !important;
+  outline: none !important;
+}
+
+/* Hero Search Form: Floating Island */
+.theme-luxury .hero-search-form {
+  background: #ffffff !important;
+  box-shadow: 0 10px 40px rgba(0,0,0,0.08) !important;
+  border: 1px solid rgba(0,0,0,0.02) !important;
+  border-radius: 4px !important;
+  padding: 1.5rem !important;
+}
+
+.theme-luxury .hero-search-input {
+  border-bottom: 1px solid #e5e5e5 !important;
+  background: transparent !important;
+}
+
+.theme-luxury .hero-search-button {
+  border-radius: 4px !important;
+}
+
+/* Footer: Clean */
+.theme-luxury .bg-primary-900,
+.theme-luxury .bg-primary-950 {
+  background: #1c1917 !important;
+  border-top: none;
+  color: #ffffff !important;
+}
+
+.theme-luxury .bg-primary-900 h3,
+.theme-luxury .bg-primary-900 h4 {
+  color: #ffffff !important;
+}
+
+.theme-luxury .bg-primary-900 * {
+  font-family: "Inter", sans-serif;
+  font-weight: 300;
+  letter-spacing: 0.02em;
+}
+
+/* Scrollbar: Thin & Elegant */
+.theme-luxury ::-webkit-scrollbar { width: 6px; }
+.theme-luxury ::-webkit-scrollbar-track { background: transparent; }
+.theme-luxury ::-webkit-scrollbar-thumb {
+  background: #d6d3d1;
+  border-radius: 3px;
+}
+.theme-luxury ::-webkit-scrollbar-thumb:hover { background: #a8a29e; }
+
+/* Selection */
+.theme-luxury ::selection {
+  background: #e7e5e4; /* Stone 200 */
+  color: #1c1917;
+}
+

@@ -3,13 +3,21 @@ import { Menu, X, Phone, Heart } from 'lucide-react'
 import { useState } from 'react'
 import WhatsAppFab from '@/components/contact/WhatsAppFab'
 import CompareBar from '@/components/property/CompareBar'
-import { useOrganization } from '@/hooks/useOrganization'
+import { useOrganization } from '@/contexts/OrganizationContext'
+import { useTheme } from '@/hooks/useTheme'
+import { useSEO } from '@/hooks/useSEO'
 import { useFavoritesStore } from '@/store/favoritesStore'
 import type { RedesSociales } from '@/types/property'
 import { getPhoneUrl } from '@/lib/formatters'
 
 export default function PublicLayout() {
   const { organization, loading } = useOrganization()
+
+  // Apply org theme colors to CSS custom properties
+  useTheme(organization)
+
+  // Set global SEO title
+  useSEO()
 
   return (
     <div className="flex min-h-screen flex-col">
@@ -42,16 +50,20 @@ function Header({ organization, loading }: OrgProps) {
   const orgName = organization?.nombre ?? 'Inmobiliaria'
   const orgPhone = organization?.telefono
   const orgLogo = organization?.logo_url
+  const mostrarNombre = organization?.mostrar_nombre_logo ?? true
 
   return (
     <header className="sticky top-0 z-50 border-b border-border bg-bg-card shadow-navbar">
       <div className="container-app flex h-16 items-center justify-between">
         {/* Logo */}
-        <Link to="/" className="flex items-center gap-2 text-xl font-bold text-primary">
-          {orgLogo ? (
+        <Link to="/" className="flex items-center gap-2.5 text-xl font-bold text-primary">
+          {orgLogo && (
             <img src={orgLogo} alt={orgName} className="h-10 w-auto object-contain" />
-          ) : (
-            <span>{loading ? '' : orgName}</span>
+          )}
+          {(mostrarNombre || !orgLogo) && (
+            <span className={orgLogo ? 'hidden sm:block' : ''}>
+              {loading ? '' : orgName}
+            </span>
           )}
         </Link>
 
@@ -99,15 +111,28 @@ function Header({ organization, loading }: OrgProps) {
           )}
         </div>
 
-        {/* Mobile menu button */}
-        <button
-          type="button"
-          className="rounded-lg p-2 text-text-secondary hover:bg-bg-subtle md:hidden"
-          onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
-          aria-label={mobileMenuOpen ? 'Cerrar menú' : 'Abrir menú'}
-        >
-          {mobileMenuOpen ? <X size={24} /> : <Menu size={24} />}
-        </button>
+        {/* Mobile menu button & Favorites */}
+        <div className="flex items-center gap-2 md:hidden">
+          <Link
+            to="/favoritos"
+            className="relative flex h-10 w-10 items-center justify-center rounded-lg text-text-secondary transition-colors hover:bg-bg-subtle"
+          >
+            <Heart size={22} />
+            {favCount > 0 && (
+              <span className="absolute right-1 top-1 flex h-4 w-4 items-center justify-center rounded-full bg-red-500 text-[10px] font-bold text-white shadow-sm">
+                {favCount}
+              </span>
+            )}
+          </Link>
+          <button
+            type="button"
+            className="rounded-lg p-2 text-text-secondary hover:bg-bg-subtle"
+            onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
+            aria-label={mobileMenuOpen ? 'Cerrar menú' : 'Abrir menú'}
+          >
+            {mobileMenuOpen ? <X size={24} /> : <Menu size={24} />}
+          </button>
+        </div>
       </div>
 
       {/* Mobile Nav */}

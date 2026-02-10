@@ -114,6 +114,7 @@ export type Database = {
           hero_titulo: string | null
           id: string
           logo_url: string | null
+          mostrar_nombre_logo: boolean | null
           nombre: string
           provincia: string | null
           redes_sociales: Json | null

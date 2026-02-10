@@ -30,19 +30,36 @@ export default function SearchResultsPage() {
   return (
     <div className="container-app py-6 lg:py-8">
       {/* Header */}
-      <div className="mb-6">
-        <h1 className="text-2xl font-bold text-text-primary md:text-3xl">Propiedades</h1>
-        <p className="mt-1 text-sm text-text-secondary">
-          {loading
-            ? 'Buscando propiedades...'
-            : `${count} propiedad${count !== 1 ? 'es' : ''} encontrada${count !== 1 ? 's' : ''}`}
-        </p>
+      <div className="relative mb-8 overflow-hidden rounded-[var(--radius-card)] border border-border bg-bg-card shadow-sm transition-all hover:shadow-md">
+        {/* Decorative background element */}
+        <div className="absolute right-0 top-0 -mr-16 -mt-16 h-64 w-64 rounded-full bg-primary/10 blur-3xl" />
+        <div className="absolute -left-10 bottom-0 h-32 w-32 rounded-full bg-primary/8 blur-2xl" />
+        
+        <div className="relative px-6 py-8 md:px-10 md:py-12">
+          <h1 className="text-3xl font-extrabold tracking-tight text-text-primary md:text-4xl lg:text-5xl">
+            Propiedades
+          </h1>
+          <div className="mt-3 flex items-center gap-2">
+            <div className={`h-2 w-2 rounded-full ${loading ? 'animate-pulse bg-primary/50' : 'bg-primary'}`} />
+            <p className="text-sm font-medium text-text-secondary md:text-base">
+              {loading
+                ? 'Buscando las mejores opciones...'
+                : `${count} propiedad${count !== 1 ? 'es' : ''} disponible${count !== 1 ? 's' : ''}`}
+            </p>
+          </div>
+        </div>
       </div>
 
-      <div className="flex gap-8">
+      <div className="flex flex-col gap-8 lg:flex-row">
         {/* Desktop filter sidebar */}
-        <aside className="hidden w-64 shrink-0 lg:block">
-          <div className="sticky top-20 rounded-[var(--radius-card)] border border-border bg-bg-card p-5">
+        <aside className="hidden w-full shrink-0 lg:block lg:w-80">
+          <div className="sticky top-24 z-10 max-h-[calc(100vh-120px)] overflow-y-auto rounded-[var(--radius-card)] border border-border bg-bg-card p-6 shadow-sm ring-1 ring-primary/5 transition-all hover:shadow-md">
+            <div className="mb-6 flex items-center gap-2 border-b border-border pb-4">
+              <div className="rounded-lg bg-primary/10 p-2 text-primary">
+                <SlidersHorizontal size={20} />
+              </div>
+              <h2 className="text-lg font-bold text-text-primary">Filtros Avanzados</h2>
+            </div>
             <FilterPanel />
           </div>
         </aside>
@@ -50,37 +67,44 @@ export default function SearchResultsPage() {
         {/* Results area */}
         <div className="min-w-0 flex-1">
           {/* Toolbar */}
-          <div className="mb-4 flex flex-wrap items-center justify-between gap-3">
+          <div className="mb-6 flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
             <FilterChips />
 
-            <div className="ml-auto flex items-center gap-3">
+            <div className="flex items-center gap-3 sm:ml-auto">
               {/* Mobile filter toggle */}
               <button
                 type="button"
                 onClick={() => setFiltersOpen(true)}
-                className="flex items-center gap-2 rounded-[var(--radius-button)] border border-border px-3 py-2 text-sm font-medium text-text-primary hover:bg-bg-subtle lg:hidden"
+                className="flex flex-1 items-center justify-center gap-2 rounded-[var(--radius-button)] border border-border bg-bg-card px-4 py-2.5 text-sm font-semibold text-text-primary shadow-sm transition-all hover:bg-bg-subtle active:scale-95 lg:hidden"
               >
-                <SlidersHorizontal size={16} />
+                <SlidersHorizontal size={18} />
                 Filtros
                 {activeFilterCount > 0 && (
-                  <span className="flex h-5 w-5 items-center justify-center rounded-full bg-primary text-[10px] text-white">
+                  <span className="flex h-5 w-5 items-center justify-center rounded-full bg-primary text-[10px] font-bold text-white shadow-sm ring-2 ring-white">
                     {activeFilterCount}
                   </span>
                 )}
               </button>
 
-              {/* Sort */}
-              <select
-                value={sortBy}
-                onChange={(e) => setSortBy(e.target.value as SortOption)}
-                className="rounded-[var(--radius-input)] border border-border bg-bg-card px-3 py-2 text-sm outline-none focus:border-primary"
-              >
-                {SORT_OPTIONS.map((opt) => (
-                  <option key={opt.value} value={opt.value}>
-                    {opt.label}
-                  </option>
-                ))}
-              </select>
+              {/* Sort selector container */}
+              <div className="relative flex-1 sm:flex-initial">
+                <select
+                  value={sortBy}
+                  onChange={(e) => setSortBy(e.target.value as SortOption)}
+                  className="w-full appearance-none rounded-[var(--radius-input)] border border-border bg-bg-card px-4 py-2.5 pr-10 text-sm font-medium text-text-primary shadow-sm outline-none transition-all hover:border-primary/50 focus:border-primary focus:ring-2 focus:ring-primary/20"
+                >
+                  {SORT_OPTIONS.map((opt) => (
+                    <option key={opt.value} value={opt.value}>
+                      Ordenar por: {opt.label}
+                    </option>
+                  ))}
+                </select>
+                <div className="pointer-events-none absolute right-3 top-1/2 -translate-y-1/2 text-text-tertiary">
+                  <svg width="12" height="12" viewBox="0 0 12 12" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <path d="M2.5 4.5L6 8L9.5 4.5" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/>
+                  </svg>
+                </div>
+              </div>
             </div>
           </div>
 

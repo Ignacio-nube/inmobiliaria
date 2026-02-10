@@ -81,3 +81,21 @@ export function truncate(text: string, maxLength: number): string {
 export function capitalize(text: string): string {
   return text.charAt(0).toUpperCase() + text.slice(1)
 }
+
+/**
+ * Helper para mapear tipo_operacion a variante de badge
+ */
+export function getOperacionBadgeVariant(
+  tipo: 'venta' | 'alquiler' | 'alquiler_temporario'
+): 'venta' | 'alquiler' | 'temporario' | 'neutral' {
+  switch (tipo) {
+    case 'venta':
+      return 'venta'
+    case 'alquiler':
+      return 'alquiler'
+    case 'alquiler_temporario':
+      return 'temporario'
+    default:
+      return 'neutral'
+  }
+}
